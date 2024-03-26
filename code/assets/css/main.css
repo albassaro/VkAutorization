@@ -1,0 +1,31 @@
+header{
+    background-color: rgba(97, 158, 168, 0.4);
+}
+.container{
+    max-width: 1200px !important;
+}
+.menu {
+    margin: 0px 20px;
+}
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+}
+.content{
+    max-width: 1300px;
+    margin: auto;
+}
+.content_img{
+    display: flex;
+    flex-direction: column;
+}
+.form-card{
+    min-width: 500px;
+    max-width: 700px;
+    box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, .5);
+    border-radius: 0.6rem;
+    padding: 40px;
+}

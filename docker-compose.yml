@@ -1,0 +1,68 @@
+# версия синтаксиса
+version: '3'
+ 
+# блок где описываем контейнеры, которые будут запускаться
+services:
+ 
+  #Контейнер с PHP
+  app:
+    build:
+      context: ./fpm
+      dockerfile: Dockerfile
+    image: application/php            # имя будущего образа
+    container_name: php               # имя контейнера после запуска
+    depends_on:
+      - database
+    volumes:
+      - ./code:/data/mysite.ru
+    # внутреннюю сеть для контейнеров 
+    networks:
+      - myNetwork
+ 
+  #контейнер с Nginx
+  webserver:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: application/nginx
+    container_name: webserver    
+    volumes:
+       - ./code:/data/mysite.ru
+    # проброс портов
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - myNetwork
+ 
+  # контейнер с MySQL
+  database:
+    image: mysql:latest
+    container_name: database
+    ports:
+      - "3306:3306"
+    # описание БД
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./dbdata:/var/lib/mysql  
+    networks:
+      - myNetwork
+
+  #phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+    ports:
+      - "5001:80"
+    networks:
+      - myNetwork
+
+#Docker Networks
+networks:
+  myNetwork:
+    driver: bridge
